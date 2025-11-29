@@ -1,0 +1,94 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    return nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+}
+
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+void palindrome(node *head)
+{
+    if (head == NULL || head->next == NULL)
+    {
+    printf("YES\n");
+    return;
+    }
+    node *start=head;
+    
+    node *slow = head;
+    node *fast = head;
+
+    while(fast->next != NULL && fast->next->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    node *cur=slow->next;
+    node *end=NULL;
+    node *nxt=NULL;
+    
+    while(cur!=NULL)
+    {
+        nxt=cur->next;
+        cur->next=end;
+        end=cur;
+        cur=nxt;
+    }
+    node *rev=end;
+    while(rev!=NULL)
+    {
+        if(start->data!=rev->data)
+        {
+            printf("NO");
+            return;
+        }
+        start=start->next;
+        rev=rev->next;
+    }
+    printf("YES");
+}
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,3);
+    inslst(&head,2);
+    inslst(&head,1);
+    display(head);
+    palindrome(head);
+    
+}
