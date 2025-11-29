@@ -1,0 +1,98 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+    struct node *prv;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    nn->prv=NULL;
+    return nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+    nn->prv=tp;
+}
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+void swap(int *a,int *b)
+{
+    int x=*a;
+    *a=*b;
+    *b=x;
+}
+void deldup(node **head)
+{
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        return;
+    }
+    for(node *i=*head;i!=NULL;i=i->next)
+    {
+        for(node *j=*head;j->next!=NULL;j=j->next)
+        {
+            if(j->data>j->next->data)
+            {
+                swap(&j->data,&j->next->data);
+            }
+        }
+    }
+    while(tp!=NULL && tp->next!=NULL)
+    {
+        if(tp->data==tp->next->data)
+        {
+            node *x=tp->next;
+            tp->next=x->next;
+            free(x);
+        }
+        else
+        {
+            tp=tp->next;
+        }
+    }
+}
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,1);
+    inslst(&head,3);
+    inslst(&head,4);
+    inslst(&head,2);
+    inslst(&head,5);
+    display(head);
+    deldup(&head);
+    printf("\n");
+    display(head);
+    
+    
+    
+}
