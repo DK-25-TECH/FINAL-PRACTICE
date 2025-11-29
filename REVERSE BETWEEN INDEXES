@@ -1,0 +1,92 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+    struct node *prv;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    nn->prv=NULL;
+    return nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+    nn->prv=tp;
+}
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+void reverse(node **head,int left,int rytt)
+{
+    node *tp=*head;
+    int l=1;
+    node *prs=NULL;
+    while(tp->next!=NULL && l<left)
+    {
+        prs=tp;
+        tp=tp->next;
+        l++;
+    }
+    
+    node *cur=tp;
+    node *start=tp;
+    node *nxt=NULL;
+    node *prv=NULL;
+    node *x=NULL;
+    while(cur!=NULL && l<=rytt)
+    {
+        nxt=cur->next;
+        cur->next=prv;
+        prv=cur;
+        cur=nxt;
+        l++;
+    }
+    if(prs!=NULL)
+    {
+        prs->next=prv;
+    }
+    else
+    {
+        *head=prv;
+    }
+    start->next=cur;
+}
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,3);
+    inslst(&head,4);
+    inslst(&head,5);
+    inslst(&head,6);
+    display(head);
+    reverse(&head,2,4);
+    printf("\n");
+    display(head);
+}
