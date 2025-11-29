@@ -1,0 +1,163 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+    struct node *prv;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    nn->prv=NULL;
+    return nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+    nn->prv=tp;
+}
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+void createCycle(node **head)
+{
+    node *tp=*head;
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=(*head)->next;
+    (*head)->next->prv=tp;
+}
+void detectycle(node *head)
+{
+    node *fx=head;
+    node *sx=head;
+    while(fx!=NULL && fx->next!=NULL)
+    {
+        sx=sx->next;
+        fx=fx->next->next;
+        if(sx==fx)
+        {
+            printf("CYCLE DETECTED");
+            return;
+        }
+    }
+    printf("NO CYCLE");
+}
+node *startCycle(node *head)
+{
+    node *sx=head;
+    node *fx=head;
+    while(fx!=NULL && fx->next!=NULL)
+    {
+        sx=sx->next;
+        fx=fx->next->next;
+        if(sx==fx)
+        {
+            break;
+        }
+    }
+    if(fx==NULL || fx->next==NULL)
+    return NULL;
+    
+    sx=head;
+    while(sx!=fx)
+    {
+        sx=sx->next;
+        fx=fx->next;
+    }
+    return sx;
+    
+}
+
+void removeCycle(node **head)
+{
+    node *sx=*head;
+    node *fx=*head;
+    while(fx!=NULL && fx->next!=NULL)
+    {
+        sx=sx->next;
+        fx=fx->next->next;
+        if(sx==fx)
+        {
+            break;
+        }
+    }
+    if(fx==NULL || fx->next==NULL)
+    {
+        return;
+    }
+    sx=*head;
+    node *prv=NULL;
+    while(sx!=fx)
+    {
+        prv=fx;
+        sx=sx->next;
+        fx=fx->next;
+    }
+    prv->next=NULL;
+    sx->prv=NULL;
+}
+node *middle(node *head)
+{
+    if(head==NULL)
+    {
+        return NULL;
+    }
+    node *fx=head;
+    node *sx=head;
+    while(fx!=NULL && fx->next!=NULL)
+    {
+        sx=sx->next;
+        fx=fx->next->next;
+    }
+    return sx;
+    
+}
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,3);
+    inslst(&head,4);
+    inslst(&head,5);
+    display(head);
+    printf("\n");
+    node *mid=middle(head);
+    display(head);
+    printf("\n");
+    createCycle(&head);
+    detectycle(head);
+    removeCycle(&head);
+    printf("\n");
+    printf("MIDDLE ELEMENT -> %d",mid->data);
+    printf("\n");
+    node *start=startCycle(head);
+    printf("STARTING OF CYCLE -> %d",start->data);
+    
+    
+}
