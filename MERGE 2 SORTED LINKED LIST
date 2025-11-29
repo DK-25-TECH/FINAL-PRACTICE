@@ -1,0 +1,133 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+}node;
+
+node* create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    return nn;
+}
+
+void insLast(node **head,int data)
+{
+    node *nn=create(data);
+    if(*head==NULL)
+    {
+        nn->next=*head;
+        *head=nn;
+        return;
+    }
+    node *tp=*head;
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+}
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+int isPresent(node *x,int data)
+{
+    while(x!=NULL)
+    {
+        if(x->data==data)
+        {
+            return 1;
+        }
+        x=x->next;
+    }
+    return 0;
+}
+
+node *merge(node **head1,node **head2)
+{
+    node *x=*head1;
+    node *y=*head2;
+    if(x==NULL)
+    {
+       
+        return y;
+    }
+    if(y==NULL)
+    {
+        return x;
+    }
+    node *nhd=NULL;
+    node *ntt=NULL;
+    while(x!=NULL && y!=NULL)
+    {
+        node *nn=malloc(sizeof(struct node));
+        nn->next=NULL;
+        if(x->data<y->data)
+        {
+            nn->data=x->data;
+            x=x->next;
+        }
+        else
+        {
+            nn->data=y->data;
+            y=y->next;
+        }
+        if(nhd==NULL)
+        {
+            nhd=ntt=nn;
+        }
+        else
+        {
+            ntt->next=nn;
+            ntt=nn;
+        }
+    }
+    while(x!=NULL)
+    {
+        node *nn=malloc(sizeof(struct node));
+        nn->data=x->data;
+        ntt->next=nn;
+        ntt=nn;
+        x=x->next;
+    }
+    while(y!=NULL)
+    {
+        node *nn=malloc(sizeof(struct node));
+        nn->data=y->data;
+        ntt->next=nn;
+        ntt=nn;
+        y=y->next;
+    }
+    return nhd;
+}
+int main()
+{
+    node *head1=NULL;
+    node *head2=NULL;
+    
+    insLast(&head1,1);
+    insLast(&head1,2);
+    insLast(&head1,3);
+    insLast(&head1,4);
+    insLast(&head1,5);
+    
+    insLast(&head2,4);
+    insLast(&head2,7);
+    insLast(&head2,8);
+    insLast(&head2,9);
+    insLast(&head2,10);
+    
+    node *x=merge(&head1,&head2);
+    display(x);
+    
+}
