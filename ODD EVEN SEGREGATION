@@ -1,0 +1,114 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+    struct node *prv;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    nn->prv=NULL;
+    return nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+    nn->prv=tp;
+}
+
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+node* oddEven(node **head)
+{
+    if(*head==NULL)
+    {
+        return NULL;
+    }
+    int x=0;
+    node *oh=NULL;
+    node *ot=NULL;
+    node *eh=NULL;
+    node *et=NULL;
+    node *tp=*head;
+    while(tp!=NULL)
+    {
+        node *nn=malloc(sizeof(struct node));
+        nn->data=tp->data;
+        nn->next=NULL;
+        nn->prv=NULL;
+        if(x%2==0)
+        {
+            if(eh==NULL)
+            {
+                eh=et=nn;
+            }
+            else
+            {
+                et->next=nn;
+                nn->prv=et;
+                et=nn;
+            }
+        }
+        else
+        {
+            if(oh==NULL)
+            {
+                oh=ot=nn;
+            }
+            else
+            {
+                ot->next=nn;
+                nn->prv=ot;
+                ot=nn;
+            }
+        }
+        tp=tp->next;
+        x++;
+    }
+    if(eh!=NULL)
+    {
+        et->next=oh;
+    }
+    else
+    {
+        ot->next=eh;
+    }
+    return eh;
+}
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,3);
+    inslst(&head,4);
+    inslst(&head,5);
+    inslst(&head,6);
+    display(head);
+    node *x=oddEven(&head);
+    printf("\n");
+    display(x);
+}
