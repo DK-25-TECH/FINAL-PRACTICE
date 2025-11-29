@@ -1,0 +1,138 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int data;
+    struct node *next;
+    struct node *prv;
+}node;
+node *create(int data)
+{
+    node *nn=malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    nn->prv=NULL;
+    return nn;
+}
+void insbeg(node **head,int data)
+{
+    node *nn=create(data);
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    nn->next=*head;
+    (*head)->prv=nn;
+    *head=nn;
+}
+
+void insmid(node **head,int data,int pos)
+{
+    node *nn=create(data);
+    if(pos==0)
+    {
+        return;
+    }
+    node *tp=*head;
+    int x=0;
+    while(tp!=NULL && x<pos-1)
+    {
+        tp=tp->next;
+        x++;
+    }
+    nn->next=tp->next;
+    nn->prv=tp;
+    tp->next=nn;
+    if(nn->next!=NULL)
+    nn->next->prv=nn;
+}
+
+void inslst(node **head,int data)
+{
+    node *nn=create(data);
+    node *tp=*head;
+    if(*head==NULL)
+    {
+        *head=nn;
+        return;
+    }
+    while(tp->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    tp->next=nn;
+    nn->prv=tp;
+}
+
+void delbeg(node **head)
+{
+    if(*head==NULL)
+    {
+        return;
+    }
+    node *tp=*head;
+    *head=(*head)->next;
+    free(tp);
+}
+
+void delmid(node **head,int pos)
+{
+    if(pos==0)
+    {
+        return;
+    }
+    node *tp=*head;
+    int x=0;
+    while(tp!=NULL && x<pos-1)
+    {
+        tp=tp->next;
+        x++;
+    }
+    node *del=tp->next;
+    tp->next=del->next;
+    if(tp->next!=NULL){
+    tp->next->prv=tp;
+    }
+    free(del);
+}
+
+void dellst(node **head)
+{
+    if(*head==NULL)
+    {
+        return;
+    }
+    node *tp=*head;
+    while(tp->next->next!=NULL)
+    {
+        tp=tp->next;
+    }
+    node *del=tp->next;
+    tp->next=NULL;
+    free(del);
+}
+void display(node *head)
+{
+    node *tp=head;
+    while(tp!=NULL)
+    {
+        printf("%d ",tp->data);
+        tp=tp->next;
+    }
+}
+
+int main()
+{
+    node *head=NULL;
+    inslst(&head,1);
+    inslst(&head,2);
+    inslst(&head,3);
+    inslst(&head,4);
+    inslst(&head,5);
+    insbeg(&head,111);
+    insmid(&head,555,3);
+    display(head);
+    printf("\n");
+    dellst(&head);
+    display(head);
+}
